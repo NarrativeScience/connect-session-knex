@@ -104,26 +104,8 @@ module.exports = function(connect) {
 			}
 		});
 
-		self.ready = self.knex.schema.hasTable(self.tablename)
-		.then(function (exists) {
-			if (!exists) {
-				return self.knex.schema.createTable(self.tablename, function (table) {
-					table.string('sid').primary();
-					table.json('sess').notNullable();
-					if (['mysql', 'mariasql'].indexOf(self.knex.client.dialect) > -1) {
-						table.dateTime('expired').notNullable();
-					} else {
-						table.timestamp('expired').notNullable();
-					}
-				});
-			}
-			return exists;
-		})
-		.then(function () {
-			dbCleanup(self);
-			self._clearer = setInterval(dbCleanup, options.clearInterval, self).unref();
-			return null;
-		});
+		dbCleanup(self);
+		self._clearer = setInterval(dbCleanup, options.clearInterval, self).unref();
 	}
 
 	// KnexStore.prototype.__proto__ = Store.prototype;
