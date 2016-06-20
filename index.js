@@ -103,7 +103,8 @@ module.exports = function(connect) {
 				filename: "connect-session-knex.sqlite"
 			}
 		});
-
+		
+		self.ready = Promise.resolve();
 		dbCleanup(self);
 		self._clearer = setInterval(dbCleanup, options.clearInterval, self).unref();
 	}
